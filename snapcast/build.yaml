@@ -7,6 +7,6 @@ build_from:
   i386: ghcr.io/hassio-addons/base:15.0.7
 labels:
   org.opencontainers.image.title: "Snapcast add-on"
-  org.opencontainers.image.description: "Snapcast server Add-on with Spotify connect support."
+  org.opencontainers.image.description: "Snapcast server add-on with Spotify connect support."
   org.opencontainers.image.source: "https://github.com/schmittfelix/hass-addons"
   org.opencontainers.image.licenses: "Apache License 2.0"

@@ -36,17 +36,22 @@ jobs:
         run: |
           declare -a changed_addons
           for addon in ${{ steps.addons.outputs.addons }}; do
+            echo "Checking $addon"
             if [[ "${{ steps.changed-files.outputs.all_changed_files }}" =~ $addon ]]; then
+              echo "Found changes in $addon"
               for file in ${{ env.MONITORED_FILES }}; do
+                  echo "Checking $addon/$file"
                   if [[ "${{ steps.changed-files.outputs.all_changed_files }}" =~ $addon/$file ]]; then
+                    echo "Found changes in $addon/$file"
                     if [[ ! "${changed_addons[@]}" =~ $addon ]]; then
+                      echo "Adding $addon to list of changed add-ons"
                       changed_addons+=("\"${addon}\",");
                     fi
                   fi
               done
             fi
           done
-          
+
           echo "Changed files: ${{ steps.changed-files.outputs.all_changed_files}}"
 
           changed=$(echo ${changed_addons[@]} | rev | cut -c 2- | rev)
