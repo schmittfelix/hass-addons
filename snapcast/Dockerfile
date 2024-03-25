@@ -11,7 +11,7 @@ RUN \
     protobuf-dev \
     pulseaudio-dev \
     avahi-dev \
-    \
+    && echo "success at step 1" \
     && apk add --no-cache \
     dbus \
     nss \
@@ -20,7 +20,7 @@ RUN \
     pulseaudio \
     alsa-plugins-pulse \
     snapcast \
-    \
+    && echo "success at step 2" \
     && cargo install \
     --locked \
     --no-default-features \
@@ -29,13 +29,14 @@ RUN \
     --bin librespot \
     --verbose \
     -- librespot \
-    \
+    && echo "success at step 3" \
     && apk del --no-cache --purge .build-dependencies \
     && rm -fr \
     /tmp/* \
     ~/.cargo \
     /usr/.crates.toml \
-    /usr/.crates2.json
+    /usr/.crates2.json \
+    && echo "success at step 4"
 
 # Copy root filesystem
 COPY rootfs /
