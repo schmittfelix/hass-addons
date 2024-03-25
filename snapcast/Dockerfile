@@ -22,7 +22,7 @@ RUN \
     snapcast \
     && echo "success at step 2" \
     && cargo install \
-    --locked \
+    #--locked \
     --no-default-features \
     --features with-dns-sd \
     --root /usr \
