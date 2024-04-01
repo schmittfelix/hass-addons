@@ -12,7 +12,7 @@ configuration:
   sampleformat:
     name: Sample format
   spotify_name:
-    name: Spotify device name
+    name: Spotify and Airplay device name
     description: The name of the device as shown in Spotify
   spotify_username:
     name: Spotify username
