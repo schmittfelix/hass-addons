@@ -18,7 +18,6 @@ WORKDIR /snapcast
 COPY snapcast .
 RUN mkdir build && cd build && cmake .. -DBUILD_SERVER=ON -DSNAPWEB_DIR=/snapweb/dist -DBUILD_CLIENT=OFF
 RUN cd build && cmake --build . && cmake --install . --prefix /snapcast-install
-#above might be problematic somehow?
 
 # Shairport-sync build image
 FROM build-base AS shairport-sync-build
