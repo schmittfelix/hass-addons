@@ -52,9 +52,7 @@ COPY --from=librespot-build /librespot/target/release/librespot /bin/librespot
 # for avahi-config and services
 COPY rootfs /
 RUN apk add --update popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast
-RUN adduser -D -H snapserver
-RUN mkdir -p $DATADIR && chown snapserver:snapserver $DATADIR
-USER snapserver
+RUN mkdir -p $DATADIR
 
 # Build arguments
 ARG BUILD_ARCH
