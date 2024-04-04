@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Snapcast
-version: "0.1.4"
+version: "0.1.5"
 slug: snapcast
 description: Snapcast server with Spotify connect and Airplay support
 url: "https://github.com/schmittfelix/hass-addons/tree/main/snapcast"
@@ -17,7 +17,7 @@ arch:
   - amd64
 map:
   - share:rw
-# host_dbus: true
+host_dbus: true
 ports:
   1704/tcp: 1704
   1705/tcp: 1705

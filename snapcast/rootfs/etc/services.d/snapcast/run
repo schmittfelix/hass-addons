@@ -13,7 +13,7 @@ config=/etc/snapserver.conf
 ## DBUS
 bashio::log.info "Starting dbus-daemon..."
 
-exec dbus-daemon --system --nofork
+dbus-daemon --system --nofork
 
 
 
