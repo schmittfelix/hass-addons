@@ -6,5 +6,86 @@
 
 bashio::log.info "Let's get started!"
 
-## Run your program
-exec /snapcast-script
+
+config=/etc/snapserver.conf
+
+
+## DBUS
+bashio::log.info "Starting dbus-daemon..."
+
+exec dbus-daemon --system --nofork
+
+
+
+## AVAHI
+until [ -e /var/run/dbus/system_bus_socket ]; do
+  sleep 1s
+done
+
+bashio::log.info "Starting avahi-daemon..."
+
+avahi-daemon --no-drop-root -f /etc/avahi/avahi-daemon.conf
+
+
+## SNAPCAST SERVER
+until [ -e /run/avahi-daemon/pid ]; do
+  sleep 1s
+done
+
+bashio::log.info "Starting snapcast server..."
+
+# Use the log level if set
+if bashio::config.has_value "log_level"; then
+    bashio::log.info "Setting log level to '$(bashio::config 'log_level')'"
+    bashio::log.level "$(bashio::config 'log_level')"
+fi
+
+bashio::log.debug "Config: $(bashio::addon.config)"
+
+echo "[stream]" > "${config}"
+for stream in $(bashio::config 'streams.streams'); do
+    echo "stream = ${stream}" >> "${config}"
+done
+
+# Add the Spotify source
+device_name=$(bashio::config 'spotify_name')
+spotify_auth=""
+if bashio::config.has_value 'spotify_username'; then
+    bashio::config.require 'spotify_password'
+
+    username=$(bashio::config 'spotify_username')
+    password=$(bashio::config 'spotify_password')
+
+    spotify_auth="&username=${username}&password=${password}"
+fi
+
+{
+    echo "source = librespot:///bin/librespot?name=Spotify&devicename=${device_name}${spotify_auth}&disable_audio_cache=true&autoplay=true"
+    echo "source = airplay:///bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
+    echo "buffer = $(bashio::config 'buffer')"
+    echo "codec = $(bashio::config 'codec')"
+    echo "send_to_muted = $(bashio::config 'send_to_muted')"
+    echo "sampleformat = $(bashio::config 'sampleformat')"
+    echo "[http]"
+    echo "doc_root = /share/snapserver/snapweb"
+} >> "${config}"
+
+# Configure snapweb
+cat <<EOT > /share/snapserver/snapweb/config.js
+"use strict";
+let config = {
+    baseUrl: (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + window.location.pathname.replace(/\/$/, '')
+}
+EOT
+
+## Run snapserver program
+snapserver -c /etc/snapserver.conf
+
+## SNAPCAST CLIENT
+
+# Wait for snapcast-server to start
+sleep 5s
+
+bashio::log.info "Starting snapcast client..."
+
+snapclient --host 127.0.0.1 --hostID Flur
