@@ -32,9 +32,9 @@ RUN apk add --update tini popt soxr libconfig libvorbis opus flac alsa-lib alsa-
 EXPOSE 1780
 EXPOSE 1705 
 EXPOSE 1704
+
 RUN for file in /etc/services.d/*/*; do chmod a+xwr $file; done
-RUN chmod a+x /snapcast-script
-CMD ["/bin/sh", "-c", "/snapcast-script"]
+CMD ["/bin/sh", "-c", "/etc/services.d/snapcast/run"]
 
 # Build arguments
 ARG BUILD_ARCH
