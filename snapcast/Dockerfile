@@ -11,13 +11,13 @@ FROM build-base AS snapcast-build
 RUN apk add --update npm boost-dev libvorbis-dev opus-dev flac-dev expat-dev
 # Snapweb dependency
 WORKDIR /snapweb
-COPY snapweb .
-RUN npm ci
-RUN npm run build
+COPY snapweb-prebuilt ./snapweb
+# RUN npm ci
+# RUN npm run build
 # Snapcast
 WORKDIR /snapcast
 COPY snapcast .
-RUN mkdir build && cd build && cmake .. -DBUILD_SERVER=ON -DSNAPWEB_DIR=/snapweb/dist -DBUILD_CLIENT=OFF
+RUN mkdir build && cd build && cmake .. -DBUILD_SERVER=ON -DSNAPWEB_DIR=/snapweb -DBUILD_CLIENT=OFF
 RUN cd build && cmake --build . && cmake --install . --prefix /snapcast-install
 
 # Shairport-sync build image
