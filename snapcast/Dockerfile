@@ -53,7 +53,7 @@ COPY --from=librespot-build /librespot/target/release/librespot /bin/librespot
 # for avahi-config and services
 COPY rootfs /
 RUN apk add --update tini popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast
-RUN mkdir -p $DATADIR
+# RUN mkdir -p $DATADIR
 
 EXPOSE 1780
 EXPOSE 1705 
