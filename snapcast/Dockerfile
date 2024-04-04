@@ -51,8 +51,15 @@ COPY --from=shairport-sync-build /alac-install /
 COPY --from=librespot-build /librespot/target/release/librespot /bin/librespot
 # for avahi-config and services
 COPY rootfs /
-RUN apk add --update popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast
+RUN apk add --update tini popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast
 RUN mkdir -p $DATADIR
+
+EXPOSE 1780
+EXPOSE 1705 
+EXPOSE 1704
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["/bin/sh", "-c", "/startup-script"]
 
 # Build arguments
 ARG BUILD_ARCH

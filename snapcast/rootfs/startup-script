@@ -1,11 +1,25 @@
-#!/usr/bin/with-contenv bashio
-# ==============================================================================
-# Start the example service
-# s6-overlay docs: https://github.com/just-containers/s6-overlay
-# ==============================================================================
 
 config=/etc/snapserver.conf
 
+
+## DBUS
+bashio::log.info "Starting dbus-daemon..."
+
+exec dbus-daemon --system --nofork
+
+
+
+## AVAHI
+until [ -e /var/run/dbus/system_bus_socket ]; do
+  sleep 1s
+done
+
+bashio::log.info "Starting avahi-daemon..."
+
+avahi-daemon --no-drop-root -f /etc/avahi/avahi-daemon.conf
+
+
+## SNAPCAST SERVER
 until [ -e /run/avahi-daemon/pid ]; do
   sleep 1s
 done
@@ -58,3 +72,12 @@ EOT
 
 ## Run snapserver program
 /bin/snapserver -c /etc/snapserver.conf
+
+## SNAPCAST CLIENT
+
+# Wait for snapcast-server to start
+sleep 5s
+
+bashio::log.info "Starting snapcast client..."
+
+/bin/snapclient --host 127.0.0.1 --hostID Flur

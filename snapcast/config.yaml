@@ -17,6 +17,8 @@ arch:
   - amd64
 map:
   - share:rw
+webui: "http://[HOST]:1780"
+host_dbus: true
 ports:
   1704/tcp: 1704
   1705/tcp: 1705
