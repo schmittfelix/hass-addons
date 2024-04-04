@@ -45,8 +45,8 @@ RUN patch < librespot.patch && cargo build --release --no-default-features
 
 # Run image
 FROM alpine:latest
-ARG DATADIR=/var/lib/snapserver
-COPY --from=snapcast-build /snapcast-install /
+# ARG DATADIR=/var/lib/snapserver
+# COPY --from=snapcast-build /snapcast-install /
 COPY --from=shairport-sync-build /shairport-sync-install /
 COPY --from=shairport-sync-build /alac-install /
 COPY --from=librespot-build /librespot/target/release/librespot /bin/librespot
