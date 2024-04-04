@@ -34,7 +34,7 @@ EXPOSE 1705
 EXPOSE 1704
 
 RUN for file in /etc/services.d/*/*; do chmod a+xwr $file; done
-CMD ["/bin/sh", "-c", "/etc/services.d/snapcast/run"]
+# CMD ["/bin/sh", "-c", "/etc/services.d/snapcast/run"]
 
 # Build arguments
 ARG BUILD_ARCH
