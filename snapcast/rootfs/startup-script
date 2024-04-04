@@ -71,7 +71,7 @@ let config = {
 EOT
 
 ## Run snapserver program
-/bin/snapserver -c /etc/snapserver.conf
+snapserver -c /etc/snapserver.conf
 
 ## SNAPCAST CLIENT
 
@@ -80,4 +80,4 @@ sleep 5s
 
 bashio::log.info "Starting snapcast client..."
 
-/bin/snapclient --host 127.0.0.1 --hostID Flur
+snapclient --host 127.0.0.1 --hostID Flur

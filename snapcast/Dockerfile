@@ -7,18 +7,18 @@ RUN apk add --update build-base autoconf automake libtool pkgconfig cmake
 RUN apk add --update soxr-dev avahi-dev alsa-lib-dev
 
 # Snapcast build image
-FROM build-base AS snapcast-build
-RUN apk add --update npm boost-dev libvorbis-dev opus-dev flac-dev expat-dev
+# FROM build-base AS snapcast-build
+# RUN apk add --update npm boost-dev libvorbis-dev opus-dev flac-dev expat-dev
 # Snapweb dependency
-WORKDIR /snapweb
-COPY snapweb-prebuilt ./snapweb
+# WORKDIR /snapweb
+# COPY snapweb-prebuilt ./snapweb
 # RUN npm ci
 # RUN npm run build
 # Snapcast
-WORKDIR /snapcast
-COPY snapcast .
-RUN mkdir build && cd build && cmake .. -DBUILD_SERVER=ON -DSNAPWEB_DIR=/snapweb -DBUILD_CLIENT=OFF
-RUN cd build && cmake --build . && cmake --install . --prefix /snapcast-install
+# WORKDIR /snapcast
+# COPY snapcast .
+# RUN mkdir build && cd build && cmake .. -DBUILD_SERVER=ON -DSNAPWEB_DIR=/snapweb -DBUILD_CLIENT=OFF
+# RUN cd build && cmake --build . && cmake --install . --prefix /snapcast-install
 
 # Shairport-sync build image
 FROM build-base AS shairport-sync-build
