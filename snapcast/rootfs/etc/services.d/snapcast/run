@@ -11,15 +11,16 @@ config=/etc/snapserver.conf
 
 
 ## DBUS
-bashio::log.info "Starting dbus-daemon..."
+# bashio::log.info "Starting dbus-daemon..."
 
-dbus-daemon --system --nofork
+# dbus-daemon --system --nofork
 
 
 
 ## AVAHI
 until [ -e /var/run/dbus/system_bus_socket ]; do
   sleep 1s
+  bashio::log.info "Waiting for dbus..."
 done
 
 bashio::log.info "Starting avahi-daemon..."
@@ -30,6 +31,7 @@ avahi-daemon --no-drop-root -f /etc/avahi/avahi-daemon.conf
 ## SNAPCAST SERVER
 until [ -e /run/avahi-daemon/pid ]; do
   sleep 1s
+  bashio::log.info "Waiting for avahi-daemon..."
 done
 
 bashio::log.info "Starting snapcast server..."
