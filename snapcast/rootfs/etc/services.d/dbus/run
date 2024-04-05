@@ -1,8 +1,8 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Community Hass.io Add-ons: Homebridge
-# Ensures we've got an unique D-Bus ID
+# Start the avahi service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
 # ==============================================================================
-# shellcheck disable=SC1091
 
-dbus-uuidgen --ensure || bashio::exit.nok 'Failed to generate a unique D-Bus ID'
+exec dbus-daemon --system --nofork \
+  || bashio::exit.nok 'Failed to start D-Bus daemon'

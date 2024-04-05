@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Start the example service
+# Start the snapcast service
 # s6-overlay docs: https://github.com/just-containers/s6-overlay
 # ==============================================================================
 
@@ -9,29 +9,8 @@ bashio::log.info "Let's get started!"
 
 config=/etc/snapserver.conf
 
-
-## DBUS
-# bashio::log.info "Starting dbus-daemon..."
-
-# dbus-daemon --system --nofork
-
-
-
-## AVAHI
-until [ -e /var/run/dbus/system_bus_socket ]; do
-  sleep 1s
-  bashio::log.info "Waiting for dbus..."
-done
-
-bashio::log.info "Starting avahi-daemon..."
-
-avahi-daemon --no-drop-root -f /etc/avahi/avahi-daemon.conf
-
-
-## SNAPCAST SERVER
 until [ -e /run/avahi-daemon/pid ]; do
   sleep 1s
-  bashio::log.info "Waiting for avahi-daemon..."
 done
 
 bashio::log.info "Starting snapcast server..."
@@ -62,7 +41,7 @@ if bashio::config.has_value 'spotify_username'; then
 fi
 
 {
-    echo "source = librespot:///bin/librespot?name=Spotify&devicename=${device_name}${spotify_auth}&disable_audio_cache=true&autoplay=true"
+    echo "source = librespot:////usr/bin/librespot?name=Spotify&devicename=${device_name}${spotify_auth}&disable_audio_cache=true&autoplay=true"
     echo "source = airplay:///bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
     echo "buffer = $(bashio::config 'buffer')"
     echo "codec = $(bashio::config 'codec')"
@@ -90,4 +69,4 @@ sleep 5s
 
 bashio::log.info "Starting snapcast client..."
 
-snapclient --host 127.0.0.1 --hostID Flur
+snapclient --host 127.0.0.1 --hostID FlurEG
