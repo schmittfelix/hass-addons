@@ -9,9 +9,9 @@ bashio::log.info "Let's get started!"
 
 config=/etc/snapserver.conf
 
-until [ -e /run/avahi-daemon/pid ]; do
-  sleep 1s
-done
+# until [ -e /run/avahi-daemon/pid ]; do
+#  sleep 1s
+# done
 
 bashio::log.info "Starting snapcast server..."
 
