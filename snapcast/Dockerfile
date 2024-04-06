@@ -28,6 +28,7 @@ WORKDIR /alac
 RUN autoreconf -fi \
     && ./configure \
     && make \
+    && make install \
     && make install DESTDIR=/alac-install
 WORKDIR /
 ##### ALAC END #####
@@ -38,6 +39,7 @@ WORKDIR /nqptp
 RUN autoreconf -fi \
     && ./configure \
     && make \
+    && make install \
     && make install DESTDIR=/nqptp-install
 WORKDIR /
 ##### NQPTP END #####
