@@ -20,7 +20,13 @@ RUN apk add --update \
     libvorbis-dev \
     opus-dev \
     flac-dev \
-    libsndfile-dev
+    libsndfile-dev \
+    mosquitto-dev \
+    libplist-dev \
+    libsodium-dev \
+    libgcrypt-dev \
+    ffmpeg-dev
+
 
 ##### ALAC #####
 RUN git clone https://github.com/mikebrady/alac
@@ -52,7 +58,6 @@ RUN autoreconf -fi
 RUN ./configure \
     --with-airplay-2 \
     --with-alsa \
-    --with-pa \
     --with-stdout \
     --with-pipe \
     --with-soxr \
