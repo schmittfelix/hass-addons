@@ -9,9 +9,9 @@ bashio::log.info "Let's get started!"
 
 config=/etc/snapserver.conf
 
-# until [ -e /run/avahi-daemon/pid ]; do
+#until [ -e /run/avahi-daemon/pid ]; do
 #  sleep 1s
-# done
+#done
 
 bashio::log.info "Starting snapcast server..."
 
@@ -42,7 +42,7 @@ fi
 
 {
     echo "source = librespot:////usr/bin/librespot?name=Spotify&devicename=${device_name}${spotify_auth}&disable_audio_cache=true&autoplay=true"
-    #echo "source = airplay:///bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
+    echo "source = airplay:////bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
     echo "buffer = $(bashio::config 'buffer')"
     echo "codec = $(bashio::config 'codec')"
     echo "send_to_muted = $(bashio::config 'send_to_muted')"
@@ -59,8 +59,11 @@ let config = {
 }
 EOT
 
+bashio::log.debug "Listing shairport mDNS backends..."
+shairport-sync -h
+
 ## Run snapserver program
-snapserver -c /etc/snapserver.conf
+snapserver -c /etc/snapserver.conf --logging.filter debug
 
 ## SNAPCAST CLIENT
 
@@ -69,4 +72,4 @@ sleep 5s
 
 bashio::log.info "Starting snapcast client..."
 
-snapclient --host 127.0.0.1 --hostID FlurEG
+snapclient --host 127.0.0.1 --hostID FlurEG --logfilter debug

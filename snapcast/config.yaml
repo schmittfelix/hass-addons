@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Snapcast
-version: "0.1.14"
+version: "0.1.15"
 slug: snapcast
 description: Snapcast server with Spotify connect and Airplay support
 url: "https://github.com/schmittfelix/hass-addons/tree/main/snapcast"
@@ -34,7 +34,7 @@ options:
   send_to_muted: false
   sampleformat: "48000:16:2"
   spotify_name: "Frankenstraße"
-  log_level: info
+  log_level: debug
 schema:
   # Use nested option to force yaml editor on addon's config page
   streams:

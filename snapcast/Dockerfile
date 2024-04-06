@@ -1,33 +1,105 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:15.0.7
-FROM $BUILD_FROM AS build-base
-# Common tools
-RUN apk add --update build-base autoconf automake libtool pkgconfig cmake
-# Common dependencies
-RUN apk add --update soxr-dev avahi-dev alsa-lib-dev
+FROM $BUILD_FROM AS shairport-sync-build
 
-# Shairport-sync build image
-FROM build-base AS shairport-sync-build
-RUN apk add --update popt-dev libconfig-dev openssl-dev
-# ALAC dependency
+# Install build dependencies
+RUN apk add --update \
+    build-base \
+    autoconf \
+    automake \
+    libtool \
+    pkgconfig \
+    cmake \
+    git \
+    soxr-dev \
+    avahi-dev \
+    alsa-lib-dev \
+    popt-dev \
+    libconfig-dev \
+    openssl-dev \
+    libvorbis-dev \
+    opus-dev \
+    flac-dev \
+    libsndfile-dev
+
+##### ALAC #####
+RUN git clone https://github.com/mikebrady/alac
 WORKDIR /alac
-COPY alac .
-RUN autoreconf -fi && ./configure
-RUN make && make install && make install DESTDIR=/alac-install
-# Shairport-sync
+RUN autoreconf -fi \
+    && ./configure \
+    && make \
+    && make install DESTDIR=/alac-install
+WORKDIR /
+##### ALAC END #####
+
+##### NQPTP #####
+RUN git clone --branch development https://github.com/mikebrady/nqptp
+WORKDIR /nqptp
+RUN autoreconf -fi \
+    && ./configure \
+    && make \
+    && make install DESTDIR=/nqptp-install
+WORKDIR /
+##### NQPTP END #####
+
+
+##### Shairport-sync ######
+RUN git clone --branch development https://github.com/mikebrady/shairport-sync
 WORKDIR /shairport-sync
-COPY shairport-sync .
-RUN autoreconf -fi && ./configure --sysconfdir=/etc --with-soxr --with-avahi --with-ssl=openssl --with-metadata --with-apple-alac -with-stdout
-RUN make && make install DESTDIR=/shairport-sync-install
+RUN autoreconf -fi \
+    && ./configure \
+    --with-airplay-2 \
+    --with-alsa \
+    --with-pa \
+    --with-stdout \
+    --with-pipe \
+    --with-soxr \
+    --with-apple-alac \
+    --with-convolution \
+    --with-metadata \
+    --with-mqtt-client \
+    --with-dbus-interface \
+    --with-mpris-interface \
+    --sysconfdir=/etc \
+    --with-ssl=openssl \
+    --with-avahi \
+    --with-external-mdns \
+    && make \
+    && make install DESTDIR=/shairport-sync-install \
+    && cd / 
+##### Shairpoint-sync END #####
 
 # Run image
 FROM $BUILD_FROM
 COPY --from=shairport-sync-build /shairport-sync-install /
 COPY --from=shairport-sync-build /alac-install /
+COPY --from=shairport-sync-build /nqptp-install /
+
 # for avahi-config and snapcast service
 COPY rootfs /
+
+# Install runtime dependencies
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && apk update
-RUN apk add --update tini popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast librespot
+RUN apk add --update \
+    popt \
+    soxr \
+    libconfig \
+    libvorbis \
+    opus \
+    flac \
+    alsa-lib \
+    alsa-plugins-pulse \
+    libgcc \
+    libstdc++ \
+    expat \
+    avahi-libs \
+    dbus \
+    avahi \
+    nss \
+    avahi-compat-libdns_sd \
+    pulseaudio \
+    snapcast \
+    librespot
 
 EXPOSE 1780
 EXPOSE 1705
@@ -35,7 +107,6 @@ EXPOSE 1704
 
 RUN for file in /etc/services.d/*/*; do chmod a+xwr $file; done
 # RUN for file in /etc/cont-init.d/*; do chmod a+xwr $file; done
-# CMD ["/bin/sh", "-c", "/etc/services.d/snapcast/run"]
 
 # Build arguments
 ARG BUILD_ARCH

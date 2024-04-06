@@ -9,10 +9,11 @@ until [[ -e /run/dbus/system_bus_socket ]];
 do
   sleep 1
 done
+bashio::log.info "D-Bus is ready, starting Avahi..."
 
 # Start the Avahi daemon
 if bashio::debug; then
-  exec avahi-daemon --debug --no-drop-root -f /etc/avahi/avahi-daemon.conf
+  exec avahi-daemon --debug --daemonize -f /etc/avahi/avahi-daemon.conf
 else
-  exec avahi-daemon --no-drop-root -f /etc/avahi/avahi-daemon.conf
+  exec avahi-daemon --daemonize -f /etc/avahi/avahi-daemon.conf
 fi
