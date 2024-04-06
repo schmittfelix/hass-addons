@@ -25,7 +25,8 @@ RUN apk add --update \
     libplist-dev \
     libsodium-dev \
     libgcrypt-dev \
-    ffmpeg-dev
+    ffmpeg-dev \
+    xxd
 
 
 ##### ALAC #####
@@ -40,7 +41,7 @@ WORKDIR /
 ##### ALAC END #####
 
 ##### NQPTP #####
-RUN git clone --branch development https://github.com/mikebrady/nqptp
+RUN git clone https://github.com/mikebrady/nqptp
 WORKDIR /nqptp
 RUN autoreconf -fi \
     && ./configure \
@@ -52,7 +53,7 @@ WORKDIR /
 
 
 ##### Shairport-sync ######
-RUN git clone --branch development https://github.com/mikebrady/shairport-sync
+RUN git clone https://github.com/mikebrady/shairport-sync
 WORKDIR /shairport-sync
 RUN autoreconf -fi
 RUN ./configure \
