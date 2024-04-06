@@ -56,5 +56,8 @@ let config = {
 }
 EOT
 
+# Start nqptp, necessary for snapserver
+nqptp
+
 ## Run snapserver program
 snapserver -c /etc/snapserver.conf --logfilter debug
