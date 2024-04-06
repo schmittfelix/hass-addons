@@ -5,7 +5,7 @@
 # ==============================================================================
 
 # Wait until D-Bus is available
-until [[ -e /var/run/dbus/system_bus_socket ]];
+until [[ -e /run/dbus/system_bus_socket ]];
 do
   sleep 1
 done
