@@ -42,7 +42,7 @@ fi
 
 {
     echo "source = librespot:////usr/bin/librespot?name=Spotify&devicename=${device_name}${spotify_auth}&disable_audio_cache=true&autoplay=true"
-    echo "source = airplay:///bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
+    #echo "source = airplay:///bin/shairport-sync?name=AirPlay&devicename=${device_name}&port=7000"
     echo "buffer = $(bashio::config 'buffer')"
     echo "codec = $(bashio::config 'codec')"
     echo "send_to_muted = $(bashio::config 'send_to_muted')"
