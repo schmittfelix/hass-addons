@@ -47,17 +47,17 @@ fi
     echo "codec = $(bashio::config 'codec')"
     echo "send_to_muted = $(bashio::config 'send_to_muted')"
     echo "sampleformat = $(bashio::config 'sampleformat')"
-    echo "[http]"
-    echo "doc_root = /share/snapserver/snapweb"
+    #echo "[http]"
+    #echo "doc_root = /share/snapserver/snapweb"
 } >> "${config}"
 
 # Configure snapweb
-cat <<EOT > /share/snapserver/snapweb/config.js
-"use strict";
-let config = {
-    baseUrl: (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + window.location.pathname.replace(/\/$/, '')
-}
-EOT
+#cat <<EOT > /share/snapserver/snapweb/config.js
+#"use strict";
+#let config = {
+#    baseUrl: (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + window.location.pathname.replace(/\/$/, '')
+#}
+#EOT
 
 ## Run snapserver program
 snapserver -c /etc/snapserver.conf
