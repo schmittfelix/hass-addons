@@ -63,10 +63,9 @@ RUN autoreconf -fi \
     --sysconfdir=/etc \
     --with-ssl=openssl \
     --with-avahi \
-    --with-external-mdns \
-    && make \
-    && make install DESTDIR=/shairport-sync-install \
-    && cd / 
+    --with-external-mdns
+RUN make
+RUN make install DESTDIR=/shairport-sync-install
 ##### Shairpoint-sync END #####
 
 # Run image
