@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start the snapcast-client service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+
+# Wait for the snapserver to be ready
+sleep 5s
+
+bashio::log.info "Starting snapcast client..."
+
+snapclient --host 127.0.0.1 --hostID FlurEG --logfilter debug

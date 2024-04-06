@@ -1,11 +1,8 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Start the snapcast service
+# Start the snapcast-server service
 # s6-overlay docs: https://github.com/just-containers/s6-overlay
 # ==============================================================================
-
-bashio::log.info "Let's get started!"
-
 
 config=/etc/snapserver.conf
 
@@ -59,17 +56,5 @@ let config = {
 }
 EOT
 
-bashio::log.debug "Listing shairport mDNS backends..."
-shairport-sync -h
-
 ## Run snapserver program
-snapserver -c /etc/snapserver.conf --logging.filter debug
-
-## SNAPCAST CLIENT
-
-# Wait for snapcast-server to start
-sleep 5s
-
-bashio::log.info "Starting snapcast client..."
-
-snapclient --host 127.0.0.1 --hostID FlurEG --logfilter debug
+snapserver -c /etc/snapserver.conf --logfilter debug

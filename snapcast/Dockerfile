@@ -91,6 +91,7 @@ RUN apk add --update \
     popt \
     soxr \
     libconfig \
+    ffmpeg \
     libvorbis \
     opus \
     flac \
@@ -105,8 +106,13 @@ RUN apk add --update \
     nss \
     avahi-compat-libdns_sd \
     pulseaudio \
+    mosquitto \
+    libplist \
+    libsodium \
+    libgcrypt \
+    libsndfile \
     snapcast \
-    librespot
+    librespot 
 
 EXPOSE 1780
 EXPOSE 1705
