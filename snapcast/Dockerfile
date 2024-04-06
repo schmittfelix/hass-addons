@@ -2,7 +2,7 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:15.0.7
 FROM $BUILD_FROM AS build-base
 # Common tools
-RUN apk add --update build-base autoconf automake libtool pkgconfig cmake 
+RUN apk add --update build-base autoconf automake libtool pkgconfig cmake
 # Common dependencies
 RUN apk add --update soxr-dev avahi-dev alsa-lib-dev
 
@@ -30,11 +30,11 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposi
 RUN apk add --update tini popt soxr libconfig libvorbis opus flac alsa-lib alsa-plugins-pulse libgcc libstdc++ expat avahi-libs dbus avahi nss avahi-compat-libdns_sd pulseaudio snapcast librespot
 
 EXPOSE 1780
-EXPOSE 1705 
+EXPOSE 1705
 EXPOSE 1704
 
 RUN for file in /etc/services.d/*/*; do chmod a+xwr $file; done
-RUN for file in /etc/cont-init.d/*; do chmod a+xwr $file; done
+# RUN for file in /etc/cont-init.d/*; do chmod a+xwr $file; done
 # CMD ["/bin/sh", "-c", "/etc/services.d/snapcast/run"]
 
 # Build arguments
