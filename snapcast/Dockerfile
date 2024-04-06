@@ -46,8 +46,8 @@ WORKDIR /
 ##### Shairport-sync ######
 RUN git clone --branch development https://github.com/mikebrady/shairport-sync
 WORKDIR /shairport-sync
-RUN autoreconf -fi \
-    && ./configure \
+RUN autoreconf -fi
+RUN ./configure \
     --with-airplay-2 \
     --with-alsa \
     --with-pa \
